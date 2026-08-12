@@ -1,0 +1,1854 @@
+﻿<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Universal Golf Society App</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&amp;display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0">
+
+    <style>
+:root {
+    --bg-dark: #0f172a;
+    --bg-gradient: linear-gradient(135deg, #020617 0%, #062c21 100%);
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.05);
+    --card-hover: rgba(255, 255, 255, 0.08);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #4ade80;
+    /* Green */
+    --accent-glow: rgba(74, 222, 128, 0.3);
+    --danger: #f87171;
+    --font-main: 'Outfit', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.app-container {
+    max-width: 2400px;
+    /* Maximize width */
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Header */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-area .icon {
+    font-size: 2.5rem;
+    color: var(--accent);
+    filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+}
+
+.accent {
+    color: var(--accent);
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.search-bar {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 99px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    background: var(--card-hover);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.search-icon {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    width: 200px;
+}
+
+/* View Tabs */
+.view-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.25rem;
+    border-radius: 99px;
+    border: 1px solid var(--card-border);
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-main);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn span {
+    font-size: 1.2rem;
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: var(--bg-dark);
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.scores-theme .tab-btn.active {
+    background: #fbbf24;
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+}
+
+.scores-theme {
+    --accent: #fbbf24;
+    --accent-glow: rgba(251, 191, 36, 0.3);
+}
+
+.btn-control {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-control:hover,
+.btn-control.active {
+    background: var(--accent);
+    color: var(--bg-dark);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+/* Edit/delete mode active = red warning state */
+#editModeBtn.active {
+    background: var(--danger);
+    border-color: var(--danger);
+    box-shadow: 0 0 15px rgba(248, 113, 113, 0.4);
+    color: white;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal {
+    background: #1e293b;
+    border: 1px solid var(--card-border);
+    padding: 2rem;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--accent);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--bg-dark);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-delete-row {
+    color: var(--danger);
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.btn-delete-row:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* Disabled/Read-only states */
+.btn-adjust:disabled,
+.btn-control:disabled,
+.btn-primary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.locked-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(248, 113, 113, 0.2);
+    border: 1px solid var(--danger);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: var(--danger);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 999;
+}
+
+
+/* Grid - Row Layout (Original) */
+.player-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+}
+
+/* List Header */
+.list-header {
+    display: grid;
+    /* 8 Columns (Name, HCP/POINTS, 5x Course Inputs, Adjust Buttons) */
+    grid-template-columns: 220px 60px 110px 110px 110px 110px 110px 80px;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+}
+
+/* Player Card - Row Layout */
+.player-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    display: grid;
+    /* 8 Columns total */
+    grid-template-columns: 220px 60px 110px 110px 110px 110px 110px 80px;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+}
+
+.course-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+    padding: 6px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.course-input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent);
+}
+
+.course-input:disabled {
+    opacity: 0.9;
+    cursor: default;
+}
+
+.input-score {
+    color: #fbbf24; /* Gold/Yellow for scores */
+    background: rgba(251, 191, 36, 0.05);
+    border-color: rgba(251, 191, 36, 0.2);
+}
+
+.input-score:focus {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: #fbbf24;
+}
+
+.score-total {
+    color: #fbbf24 !important;
+    font-weight: 700;
+}
+
+/* Theme Colors for Inputs */
+.input-tudor {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    border-color: rgba(251, 191, 36, 0.2);
+}
+
+.input-poultwood {
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.1);
+    border-color: rgba(167, 139, 250, 0.2);
+}
+
+.input-cobtree {
+    color: #f472b6;
+    background: rgba(244, 114, 182, 0.1);
+    border-color: rgba(244, 114, 182, 0.2);
+}
+
+.input-redlibbets {
+    color: #60a5fa;
+    background: rgba(96, 165, 250, 0.1);
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+.input-etchinghill {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.2);
+}
+
+.player-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    /* Vertical strip on left */
+    background: linear-gradient(180deg, var(--accent), transparent);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.player-card:hover {
+    background: var(--card-hover);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.player-card:hover::before {
+    opacity: 1;
+    background: var(--accent);
+}
+
+.player-header {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    /* Row to allow name + member label */
+    align-items: center;
+    overflow: hidden;
+    grid-column: 1;
+    gap: 5px;
+}
+
+.handicap-value.focusable {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px 4px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.handicap-value.focusable:focus {
+    background: rgba(34, 197, 94, 0.2);
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.4);
+}
+
+.player-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+}
+
+/* Specific style for Seamus */
+.special-member-label {
+    color: #3b82f6;
+    /* Blue */
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+
+/* Actions positioning */
+.actions {
+    display: flex;
+    gap: 0.25rem;
+    background: transparent;
+    padding: 0;
+    justify-content: center;
+}
+
+.btn-adjust {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+}
+
+.btn-adjust:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+}
+
+.btn-adjust span {
+    font-size: 1rem;
+}
+
+.adjust-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.adjust-label {
+    display: none;
+}
+
+/* Footer */
+footer {
+    margin-top: 4rem;
+    text-align: center;
+    color: var(--text-muted);
+    padding-bottom: 2rem;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    opacity: 0.5;
+}
+
+.btn-text:hover {
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    main {
+        overflow-x: auto !important;
+        padding-bottom: 1rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .list-header, .player-grid {
+        min-width: 1000px; /* Keep columns wide enough to read */
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        padding: 0.5rem;
+    }
+
+    .main-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        text-align: center;
+        padding-bottom: 1.5rem;
+    }
+
+    .controls {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .view-tabs {
+        width: 100%;
+        max-width: 400px;
+        order: -1; /* Keep tabs at top of controls */
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: 400px;
+        margin-top: 0.5rem;
+    }
+
+    .btn-control {
+        width: 40px;
+        height: 40px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .logo-area .icon {
+        font-size: 2rem;
+    }
+}
+
+.handicap-display {
+    position: relative;
+}
+
+/* Highlight Colors (Placement) */
+.h-none { background: transparent !important; }
+.h-winner { background-color: #22c55e !important; color: white !important; }
+.h-runner { background-color: #3b82f6 !important; color: white !important; }
+.h-last { background-color: #ef4444 !important; color: white !important; }
+
+/* Skill Awards (Emojis) */
+.s-longest::after, .s-nearest::after, .s-both::after {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    font-family: sans-serif;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 3px;
+    z-index: 10;
+    pointer-events: none;
+    color: white;
+    letter-spacing: 0;
+}
+.s-longest::after  { content: "LD"; background: #f59e0b; }
+.s-nearest::after  { content: "NP"; background: #8b5cf6; }
+.s-both::after     { content: "LD NP"; background: #ec4899; }
+
+
+/* Legend Styles */
+.scores-legend {
+    display: none;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.75rem;
+    margin-top: 1rem;
+    border-radius: 8px;
+}
+
+body.scores-theme .scores-legend {
+    display: flex;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+}
+
+/* Ensure inputs take the color of their container if needed */
+.course-input.h-winner, .course-input.h-runner, .course-input.h-last, .course-input.h-longest, .course-input.h-nearest {
+    border-color: rgba(255,255,255,0.2) !important;
+}
+</style>
+<style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,#onetap_google_intermediate_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,.adthrive-auto-injected-player-container,.adthrive[id^="cls-video-container"]:has(.adthrive-auto-injected-player-container),#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style>    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body class="scores-theme">
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo-area">
+                <span class="material-symbols-rounded icon">golf_course</span>
+                <h1>Universal Golf Society <span class="accent">August 2026</span></h1>
+            </div>
+            <div class="controls">
+                <span id="syncStatus" style="font-size:0.75rem; padding: 0 0.5rem; align-self:center;"></span>
+                <div class="view-tabs" style="display: flex;">
+                    <button id="tabHandicaps" class="tab-btn" onclick="setView('handicaps')">
+                        <span class="material-symbols-rounded">golf_course</span>
+                        Handicaps
+                    </button>
+                    <button id="tabScores" class="tab-btn active" onclick="setView('scores')">
+                        <span class="material-symbols-rounded">flag</span>
+                        Scores
+                    </button>
+                </div>
+                <div class="search-bar">
+                    <span class="material-symbols-rounded search-icon">search</span>
+                    <input type="text" id="searchInput" placeholder="Find player...">
+                </div>
+                <button id="settingsBtn" class="btn-control" title="Society Settings" onclick="openSettingsModal()" style="display: flex;">
+                    <span class="material-symbols-rounded">settings</span>
+                </button>
+                <button id="addPlayerBtn" class="btn-control" title="Add New Player" style="display: flex;">
+                    <span class="material-symbols-rounded">person_add</span>
+                </button>
+                <button id="editModeBtn" class="btn-control" title="Remove Players" style="display: flex;">
+                    <span class="material-symbols-rounded">edit</span>
+                </button>
+                <button id="highlightModeBtn" class="btn-control" onclick="toggleHighlightMode()" title="Color Highlight Mode" style="display: flex;">
+                    <span class="material-symbols-rounded">palette</span>
+                </button>
+                <button id="cloudSetupBtn" class="btn-control" title="Cloud Sync Setup" onclick="openCloudSetup()" style="display: flex;">
+                    <span class="material-symbols-rounded">cloud_sync</span>
+                </button>
+                <button id="logoutBtn" class="btn-control" title="Logout" style="display: flex;">
+                    <span class="material-symbols-rounded">logout</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal-overlay hidden">
+            <div class="modal">
+                <h2 id="loginTitle">Admin Login</h2>
+                <p id="loginSubtitle" style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Enter
+                    your password to manage handicaps</p>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" data-ddg-inputtype="credentials.password.current" data-ddg-autofill="true" class="ddg-autofilled" style="background-size: auto 20px !important; background-position: right center !important; background-repeat: no-repeat !important; background-origin: content-box !important; background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZmlsbD0iIzc2NDMxMCIgZmlsbC1vcGFjaXR5PSIuOSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTUuNSA2YTIuNSAyLjUgMCAxIDEgMCA1IDIuNSAyLjUgMCAwIDEgMC01bTAgMS41YTEgMSAwIDEgMCAwIDIgMSAxIDAgMCAwIDAtMiIgY2xpcC1ydWxlPSJldmVub2RkIi8+CiAgPHBhdGggZmlsbD0iIzc2NDMxMCIgZmlsbC1vcGFjaXR5PSIuOSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTQuOTk4IDJBNy4wMDUgNy4wMDUgMCAwIDEgMjIgOS4wMDdhNy4wMDQgNy4wMDQgMCAwIDEtOC43MDUgNi43OTdjLS4xNjMtLjA0MS0uMjg2LjAwOC0uMzQ1LjA2N2wtMi41NTcgMi41NTlhMiAyIDAgMCAxLTEuNDE1LjU4NmgtLjk4MnYuNzM0QTIuMjUgMi4yNSAwIDAgMSA1Ljc0NSAyMmgtLjk5M2EyLjc1IDIuNzUgMCAwIDEtMi43NS0yLjczNUwyIDE4Ljc3YTMuNzUgMy43NSAwIDAgMSAxLjA5OC0yLjY3bDUuMDQtNS4wNDNjLjA2LS4wNi4xMDctLjE4My4wNjYtLjM0NmE3IDcgMCAwIDEtLjIwOC0xLjcwNEE3LjAwNCA3LjAwNCAwIDAgMSAxNC45OTggMm0wIDEuNWE1LjUwNCA1LjUwNCAwIDAgMC01LjMzNyA2Ljg0OGMuMTQ3LjU4OS4wMjcgMS4yNzktLjQ2MiAxLjc2OGwtNS4wNCA1LjA0NGEyLjI1IDIuMjUgMCAwIDAtLjY1OSAxLjYwM2wuMDAzLjQ5NGExLjI1IDEuMjUgMCAwIDAgMS4yNSAxLjI0M2guOTkyYS43NS43NSAwIDAgMCAuNzUtLjc1di0uNzM0YTEuNSAxLjUgMCAwIDEgMS41LTEuNWguOTgzYS41LjUgMCAwIDAgLjM1My0uMTQ3bDIuNTU4LTIuNTU5Yy40OS0uNDkgMS4xOC0uNjA5IDEuNzctLjQ2MWE1LjUwNCA1LjUwNCAwIDAgMCA2Ljg0LTUuMzQyQTUuNTA1IDUuNTA1IDAgMCAwIDE1IDMuNVoiIGNsaXAtcnVsZT0iZXZlbm9kZCIvPgo8L3N2Zz4K&quot;) !important; transition: background !important; background-color: rgb(248, 244, 152) !important; color: rgb(51, 51, 51) !important;">
+                </div>
+                <div id="loginError" style="color: var(--danger); font-size: 0.9rem; margin-top: 0.5rem; display: none;">Incorrect
+                    password</div>
+                <div class="modal-actions">
+                    <a href="mailto:seamus.murphy30@btinternet.com?subject=Golf%20App%20Password%20Reset" class="btn-text" style="font-size: 0.75rem; text-decoration: none;">Forgot Password?</a>
+                    <button id="guestLoginBtn" class="btn-text" style="font-size: 0.75rem; margin-right: auto; margin-left: 1rem;">Continue as Guest</button>
+                    <button id="loginBtn" class="btn-primary">Login</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal-overlay hidden">
+            <div class="modal" style="max-width: 500px;">
+                <h2>âš™ï¸ Society Settings</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Society Name</label>
+                        <input type="text" id="setSocietyName" placeholder="e.g. My Golf Society" data-ddg-inputtype="unknown">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Season/Year</label>
+                        <input type="text" id="setSocietyYear" placeholder="e.g. 2026" data-ddg-inputtype="unknown">
+                    </div>
+                    <div class="form-group">
+                        <label>Course 1 Name</label>
+                        <input type="text" id="setCourse1" data-ddg-inputtype="unknown">
+                    </div>
+                    <div class="form-group">
+                        <label>Course 2 Name</label>
+                        <input type="text" id="setCourse2" data-ddg-inputtype="unknown">
+                    </div>
+                    <div class="form-group">
+                        <label>Course 3 Name</label>
+                        <input type="text" id="setCourse3" data-ddg-inputtype="unknown">
+                    </div>
+                    <div class="form-group">
+                        <label>Course 4 Name</label>
+                        <input type="text" id="setCourse4" data-ddg-inputtype="unknown">
+                    </div>
+                    <div class="form-group">
+                        <label>Course 5 Name</label>
+                        <input type="text" id="setCourse5" data-ddg-inputtype="unknown">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-text" onclick="closeSettingsModal()">Cancel</button>
+                    <button class="btn-primary" onclick="confirmSaveSettings()">Save Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Player Modal -->
+        <div id="addPlayerModal" class="modal-overlay hidden">
+            <div class="modal">
+                <h2>Add New Player</h2>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="newPlayerName" placeholder="e.g. Tiger Woods" data-ddg-inputtype="identities.fullName">
+                </div>
+                <div class="form-group">
+                    <label>Initial Handicap</label>
+                    <input type="number" id="newPlayerHcp" value="28.0" step="0.1" data-ddg-inputtype="unknown">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="newPlayerCategory" data-ddg-inputtype="unknown">
+                        <option value="member">Member</option>
+                        <option value="guest">Guest</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button id="cancelAddBtn" class="btn-text">Cancel</button>
+                    <button id="confirmAddBtn" class="btn-primary">Add Player</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Player Modal -->
+        <div id="editPlayerModal" class="modal-overlay hidden">
+            <div class="modal">
+                <h2>Edit Player</h2>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="editPlayerName" placeholder="Player name" data-ddg-inputtype="identities.fullName">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="editPlayerCategory" data-ddg-inputtype="unknown">
+                        <option value="member">Member</option>
+                        <option value="guest">Guest</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button id="cancelEditBtn" class="btn-text" onclick="closeEditModal()">Cancel</button>
+                    <button id="confirmEditBtn" class="btn-primary" onclick="saveEditPlayer()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cloud Sync Setup Modal -->
+        <div id="cloudSetupModal" class="modal-overlay hidden">
+            <div class="modal">
+                <h2>â˜ï¸ Cloud Sync Setup</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                    Enter your <strong style="color:var(--text-main)">JSONBin.io</strong> credentials so all devices
+                    share the same live data.
+                </p>
+                <div class="form-group">
+                    <label>Master Key</label>
+                    <input type="text" id="cloudApiKey" placeholder="$2a$10$..." data-ddg-inputtype="unknown">
+                </div>
+                <div class="form-group">
+                    <label>Bin ID</label>
+                    <input type="text" id="cloudBinId" placeholder="6639f..." data-ddg-inputtype="unknown">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-text" onclick="closeCloudSetup()">Cancel</button>
+                    <button class="btn-primary" onclick="saveCloudSetup()">Save &amp; Connect</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password Modal -->
+        <div id="changePasswordModal" class="modal-overlay hidden">
+            <div class="modal">
+                <h2>ðŸ”‘ Change Admin Password</h2>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="newAdminPassword" placeholder="Enter new password" data-ddg-inputtype="credentials.password.new">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirmAdminPassword" placeholder="Confirm new password" data-ddg-inputtype="credentials.password.new">
+                </div>
+                <div id="changePassError" style="color: var(--danger); font-size: 0.9rem; margin-top: 0.5rem; display: none;">Passwords do not
+                    match</div>
+                <div class="modal-actions">
+                    <button class="btn-text" onclick="closeChangePasswordModal()">Cancel</button>
+                    <button class="btn-primary" onclick="saveNewPassword()">Update Password</button>
+                </div>
+            </div>
+        </div>
+
+        <main>
+            <div class="list-header">
+                <span>Player Name</span>
+                <span style="text-align: right;">POINTS</span>
+                <span style="text-align: right;">Day one</span>
+                <span style="text-align: right;">Day Two</span>
+                <span style="text-align: right;">Day Three</span>
+                <span style="text-align: right;"></span>
+                <span style="text-align: right;"></span>
+                <span style="text-align: center;">Adjust</span>
+            </div>
+            <div id="playerGrid" class="player-grid"></div>
+
+            <div class="scores-legend">
+                <div style="width: 100%; margin-bottom: 0.5rem; font-weight: 600; color: var(--accent);">&#x1F3A8; HOW TO HIGHLIGHT (Admin only): <span style="font-weight: 400; color: var(--text-muted);">Click the Palette icon to switch modes. Then tap any score box to cycle Colors or Skills.</span></div>
+                <div class="legend-item"><div class="legend-swatch h-winner"></div> Winner</div>
+                <div class="legend-item"><div class="legend-swatch h-runner"></div> Runner up</div>
+                <div class="legend-item"><div class="legend-swatch h-last"></div> Boobie</div>
+                <div class="legend-item"><span style="background:#f59e0b;color:white;padding:1px 5px;border-radius:3px;font-weight:700;font-size:0.7rem;">LD</span> Longest Drive</div>
+                <div class="legend-item"><span style="background:#8b5cf6;color:white;padding:1px 5px;border-radius:3px;font-weight:700;font-size:0.7rem;">NP</span> Nearest Pin</div>
+                <div id="adminLoginInLegend" style="display:none; width:100%; margin-top:0.5rem;">
+                    <button onclick="document.getElementById('loginModal').classList.remove('hidden')" 
+                            style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:var(--text-muted); 
+                                   padding:4px 12px; border-radius:20px; cursor:pointer; font-size:0.75rem; 
+                                   display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-rounded" style="font-size:0.9rem;">lock</span>
+                        Admin Login
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p id="footerYear">Universal Manager</p>
+            <div style="display: flex; gap: 1rem;">
+                <input type="file" id="importInput" accept=".json" style="display: none;">
+                <button id="importDataBtn" class="tab-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; display: inline-block;">Import</button>
+                <button id="downloadDataBtn" class="tab-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; display: inline-block;" onclick="downloadJsonBackup()">Backup</button>
+                                <button id="screenshotBtn" class="btn-control" title="Take Screenshot" onclick="takeScreenshot()">
+                    <span class="material-symbols-rounded">photo_camera</span>
+                </button>
+                <button id="shareSnapshotBtn" class="tab-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: var(--accent); color: var(--bg-dark); display: inline-block;" onclick="downloadSnapshot()">Share Snapshot</button>
+                <button id="changePasswordBtn" class="tab-btn" style="display: inline-block; font-size: 0.8rem; padding: 0.4rem 0.8rem;" onclick="openChangePasswordModal()">Password</button>
+                <button id="resetDataBtn" class="tab-btn" style="display: inline-block; font-size: 0.8rem; padding: 0.4rem 0.8rem;">Reset App</button>
+                <button id="saveAsSocietyBtn" class="tab-btn" style="display: inline-block; font-size: 0.8rem; padding: 0.5rem 1.1rem; background: linear-gradient(135deg,#4ade80,#22c55e); color: #0f172a; font-weight: 700; border: none; border-radius:8px; cursor:pointer;" onclick="quickSaveAsSociety()">&#128190; Save As Society</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Save As Society Modal -->
+    <div id="saveAsSocietyModal" class="modal-overlay hidden" style="z-index: 2000;">
+        <div class="modal" style="max-width: 500px;">
+            <h2 style="color:var(--accent);">&#128190; Save As New Society</h2>
+            <p style="color: var(--text-muted); font-size:0.85rem; margin-bottom:1.5rem;">Downloads a standalone copy of this app pre-loaded with the current course names, players and scores &mdash; ready to use as a separate society file.</p>
+            <div class="form-group">
+                <label>Society Name (also used as the filename)</label>
+                <input type="text" id="saveAsSocietyName" placeholder="e.g. Top Meadow August 2026">
+            </div>
+            <div class="form-group">
+                <label>Year / Event Label</label>
+                <input type="text" id="saveAsSocietyYear" placeholder="e.g. August 2026">
+            </div>
+            <div style="background:rgba(74,222,128,0.06); border:1px solid rgba(74,222,128,0.2); border-radius:8px; padding:1rem; margin-bottom:1rem; font-size:0.82rem; color:var(--text-muted);">
+                <strong style="color:var(--text-main);">Will include:</strong>
+                <div id="saveAsSocietyInfo" style="margin-top:0.5rem;"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="tab-btn" onclick="closeSaveAsSocietyModal()" style="padding:0.6rem 1.2rem;">Cancel</button>
+                <button class="btn-primary" onclick="confirmSaveAsSociety()" style="background:linear-gradient(135deg,#4ade80,#22c55e);color:#0f172a;">&#11015; Download Society App</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+// Application Data - Universal Version (Complete logic)
+const INITIAL_SETTINGS = {
+    societyName: 'Universal Golf Society',
+    societyYear: new Date().getFullYear().toString(),
+    courses: ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5']
+};
+
+// Fallback player data shown to new devices when no cloud/localStorage data exists
+const INITIAL_DATA = [];
+
+// State
+// Helper to scope localStorage keys to the specific repository/folder name so they do not clash
+function getStorageKey(key) {
+    try {
+        const path = window.location.pathname.replace(/\\/g, '/');
+        const segments = path.split('/').filter(Boolean);
+        if (segments.length > 0) {
+            const repoName = segments[segments.length - 2] || segments[0];
+            if (repoName && !repoName.toLowerCase().endsWith('.html')) {
+                return `${key}_${repoName.toLowerCase().trim()}`;
+            }
+        }
+    } catch (e) {}
+    return key;
+}
+
+let players = [];
+let settings = JSON.parse(JSON.stringify(INITIAL_SETTINGS));
+let currentView = 'handicaps'; 
+let isEditMode = false;
+let highlightState = 0; // 0: off, 1: placement, 2: skill
+let isAuthenticated = false;
+let isGuest = false;
+let lastFocusedField = { playerId: null, property: null };
+let editingPlayerId = null;
+
+// Course Sync (JSONBin.io)
+const JSONBIN_API_BASE = 'https://api.jsonbin.io/v3';
+let syncTimeout = null;
+
+// Initialize
+async function init() {
+    try {
+        setupEventListeners();
+        
+        const ignoreSnapshot = localStorage.getItem(getStorageKey('ignoreSnapshot')) === 'true';
+        if (window.SNAPSHOT_DATA && !ignoreSnapshot) {
+            // Load data from snapshot
+            players = window.SNAPSHOT_DATA.players || [];
+            settings = window.SNAPSHOT_DATA.settings || JSON.parse(JSON.stringify(INITIAL_SETTINGS));
+            if (!settings.courses || !Array.isArray(settings.courses)) {
+                settings.courses = ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5'];
+            }
+            currentView = window.SNAPSHOT_DATA.currentView || 'handicaps';
+
+            if (window.SNAPSHOT_DATA.isSocietySave) {
+                // Society save - opens as a full editable admin app
+                // Restore admin password hash from snapshot so login works on any device
+                if (window.SNAPSHOT_DATA.adminHash) {
+                    localStorage.setItem(getStorageKey('adminPasswordHash'), window.SNAPSHOT_DATA.adminHash);
+                }
+                // Always open fully authenticated for society saves
+                isAuthenticated = true;
+                isGuest = false;
+            } else {
+                // Read-only shared snapshot - guest mode, admin can log in manually
+                isGuest = true;
+                isAuthenticated = false;
+                const savedAdminHash = localStorage.getItem(getStorageKey('adminPasswordHash'));
+                if (savedAdminHash) {
+                    isAuthenticated = true;
+                    isGuest = false;
+                }
+            }
+
+            saveData();
+            localStorage.setItem(getStorageKey('universalSettings'), JSON.stringify(settings));
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) loginModal.classList.add('hidden');
+        } else {
+            loadData();
+            loadSettings();
+            await loadFromCloud();
+            const hasStoredData = localStorage.getItem(getStorageKey('universalData')) !== null;
+            if (!hasStoredData && (!players || players.length === 0)) {
+                players = JSON.parse(JSON.stringify(INITIAL_DATA));
+                saveData();
+            }
+            checkAuthentication();
+        }
+        
+        applySettings();
+        renderPlayers();
+        updateUIForAuth();
+    } catch (err) {
+        console.error("Initialization error:", err);
+        if (!players || players.length === 0) {
+            players = JSON.parse(JSON.stringify(INITIAL_DATA));
+        }
+        renderPlayers();
+    }
+}
+
+
+function setupEventListeners() {
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) loginBtn.onclick = attemptLogin;
+
+    const guestBtn = document.getElementById('guestLoginBtn');
+    if (guestBtn) guestBtn.onclick = () => {
+        isGuest = true;
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) loginModal.classList.add('hidden');
+        updateUIForAuth();
+        renderPlayers(); // Ensure data is always visible after guest login
+    };
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.onclick = () => {
+        isAuthenticated = false;
+        isGuest = false;
+        location.reload();
+    };
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.oninput = () => renderPlayers();
+
+    const addPlayerBtn = document.getElementById('addPlayerBtn');
+    if (addPlayerBtn) addPlayerBtn.onclick = openModal;
+
+    const editModeBtn = document.getElementById('editModeBtn');
+    if (editModeBtn) editModeBtn.onclick = toggleEditMode;
+
+    const resetBtn = document.getElementById('resetDataBtn');
+    if (resetBtn) resetBtn.onclick = resetToDefaults;
+
+    const downloadBtn = document.getElementById('downloadDataBtn');
+    if (downloadBtn) downloadBtn.onclick = downloadJsonBackup;
+
+    const importBtn = document.getElementById('importDataBtn');
+    const importInput = document.getElementById('importInput');
+    if (importBtn && importInput) {
+        importBtn.onclick = () => importInput.click();
+        importInput.onchange = importDataFromFile;
+    }
+
+    const cancelAddBtn = document.getElementById('cancelAddBtn');
+    if (cancelAddBtn) cancelAddBtn.onclick = closeModal;
+
+    const confirmAddBtn = document.getElementById('confirmAddBtn');
+    if (confirmAddBtn) confirmAddBtn.onclick = addNewPlayer;
+}
+
+// Settings Management
+function loadSettings() {
+    const stored = localStorage.getItem(getStorageKey('universalSettings'));
+    if (stored) settings = JSON.parse(stored);
+    if (!settings.courses || !Array.isArray(settings.courses)) {
+        settings.courses = ["Course 1", "Course 2", "Course 3", "Course 4", "Course 5"];
+    }
+}
+
+function saveSettings() {
+    localStorage.setItem(getStorageKey('universalSettings'), JSON.stringify(settings));
+    applySettings();
+    saveData();
+}
+
+function applySettings() {
+    const titleEl = document.querySelector('.logo-area h1');
+    if (titleEl) {
+        titleEl.innerHTML = `${settings.societyName} <span class="accent">${settings.societyYear}</span>`;
+    }
+    document.title = `${settings.societyName} ${settings.societyYear}`;
+
+    const headers = document.querySelectorAll('.list-header span');
+    if (headers.length >= 7) {
+        headers[1].textContent = currentView === 'handicaps' ? 'HCP' : 'POINTS';
+        (settings.courses || []).forEach((name, i) => {
+            if (headers[i + 2]) headers[i + 2].textContent = name;
+        });
+    }
+    
+    const tabHcp = document.getElementById('tabHandicaps');
+    const tabScores = document.getElementById('tabScores');
+    if (tabHcp && tabScores) {
+        tabHcp.classList.toggle('active', currentView === 'handicaps');
+        tabScores.classList.toggle('active', currentView === 'scores');
+    }
+
+    if (currentView === 'scores') {
+        document.body.classList.add('scores-theme');
+    } else {
+        document.body.classList.remove('scores-theme');
+    }
+}
+
+window.setView = function(view) {
+    currentView = view;
+    applySettings();
+    renderPlayers();
+}
+
+// Formatting
+function formatDisplayName(name) {
+    if (!name) return "";
+    const parts = name.trim().split(/\s+/);
+    if (parts.length < 2) return name;
+    return `${parts[0]} ${parts[1]}`;
+}
+
+// Rendering
+function renderPlayers() {
+    const playerGrid = document.getElementById('playerGrid');
+    if (!playerGrid) return;
+    playerGrid.innerHTML = '';
+    
+    const searchInput = document.getElementById('searchInput');
+    const text = searchInput ? searchInput.value.toLowerCase() : '';
+
+    players.sort((a, b) => a.name.localeCompare(b.name));
+    const filtered = players.filter(p => p.name.toLowerCase().includes(text));
+
+    filtered.forEach(player => {
+        const card = document.createElement('div');
+        card.className = 'player-card';
+        const displayName = formatDisplayName(player.name);
+        const nameHtml = `<div class="player-name" ${isAuthenticated ? `onclick="window.openEditModal('${player.id}')"` : ''} style="${isAuthenticated ? 'cursor:pointer;' : ''}">${displayName}</div>`;
+        const disabled = isAuthenticated ? '' : 'disabled';
+        const isReadOnly = highlightState > 0 ? 'readonly' : '';
+
+        let totalScore = 0;
+        [1, 2, 3, 4, 5].forEach(i => {
+            const s = parseFloat(player[`c${i}_score`]);
+            if (!isNaN(s)) totalScore += s;
+        });
+
+        const mainVal = currentView === 'handicaps' ? parseFloat(player.handicap || 28).toFixed(1) : totalScore;
+
+        card.innerHTML = `
+            <div class="player-header">${nameHtml}</div>
+            <div class="handicap-display" style="grid-column: 2;">
+                <div class="handicap-value">${mainVal}</div>
+            </div>
+            ${[1, 2, 3, 4, 5].map((i) => {
+                const prop = currentView === 'handicaps' ? `c${i}_handicap` : `c${i}_score`;
+                const colorProp = `c${i}_color`;
+                const skillProp = `c${i}_skill`;
+                const val = player[prop] || '';
+                const colorClass = currentView === 'scores' ? (player[colorProp] || 'h-none') : 'h-none';
+                const skillClass = currentView === 'scores' ? (player[skillProp] || 's-none') : 's-none';
+                return `
+                    <div class="handicap-display ${colorClass} ${skillClass}" style="grid-column: ${i + 2};">
+                        <input type="text" class="course-input ${colorClass}" value="${val}" 
+                               onfocus="window.setFocusedField('${player.id}', '${prop}')" 
+                               oninput="window.updateCourseManual('${player.id}', '${prop}', this.value)" 
+                               onclick="if(highlightState === 1) window.cycleColor('${player.id}', '${colorProp}'); else if(highlightState === 2) window.cycleSkill('${player.id}', '${skillProp}');"
+                               ondblclick="if(highlightState === 0) window.cycleColor('${player.id}', '${colorProp}')"
+                               oncontextmenu="event.preventDefault(); window.cycleSkill('${player.id}', '${skillProp}')"
+                               ${disabled} ${isReadOnly}>
+                    </div>
+                `;
+            }).join('')}
+            <div class="actions" style="grid-column: 8;">
+                ${isEditMode && isAuthenticated ? `
+                    <button class="btn-adjust" style="background:var(--danger); color:white;" onclick="window.deletePlayer('${player.id}')">
+                        <span class="material-symbols-rounded" style="font-size:1.1rem;">delete</span>
+                    </button>
+                ` : `
+                    <button class="btn-adjust" onclick="window.updateGlobalHandicaps('${player.id}', -1)" ${disabled}>-</button>
+                    <button class="btn-adjust" onclick="window.updateGlobalHandicaps('${player.id}', 1)" ${disabled}>+</button>
+                `}
+            </div>
+        `;
+        playerGrid.appendChild(card);
+    });
+}
+
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    renderPlayers();
+}
+
+window.toggleHighlightMode = function() {
+    highlightState = (highlightState + 1) % 3;
+    const btn = document.getElementById('highlightModeBtn');
+    if (btn) {
+        btn.classList.toggle('active', highlightState > 0);
+        if (highlightState === 0) {
+            btn.innerHTML = '<span class="material-symbols-rounded">palette</span>';
+            btn.style.color = '';
+        } else if (highlightState === 1) {
+            btn.innerHTML = '<span class="material-symbols-rounded">palette</span>';
+            btn.style.color = '#22c55e'; // Green
+        } else if (highlightState === 2) {
+            btn.innerHTML = '<span class="material-symbols-rounded">rocket_launch</span>';
+            btn.style.color = '#eab308'; // Yellow
+        }
+    }
+    renderPlayers();
+}
+
+window.cycleColor = function (id, colorProperty) {
+    if (!isAuthenticated) return;
+    const p = players.find(x => x.id === id);
+    if (!p) return;
+    const colors = ['h-none', 'h-winner', 'h-runner', 'h-last'];
+    const current = p[colorProperty] || 'h-none';
+    const nextIndex = (colors.indexOf(current) + 1) % colors.length;
+    p[colorProperty] = colors[nextIndex];
+    saveData();
+    renderPlayers();
+}
+
+window.cycleSkill = function (id, skillProperty) {
+    if (!isAuthenticated) return;
+    const p = players.find(x => x.id === id);
+    if (!p) return;
+    const skills = ['s-none', 's-longest', 's-nearest', 's-both'];
+    const current = p[skillProperty] || 's-none';
+    const nextIndex = (skills.indexOf(current) + 1) % skills.length;
+    p[skillProperty] = skills[nextIndex];
+    saveData();
+    renderPlayers();
+}
+
+function resetToDefaults() {
+    if (confirm('Are you sure you want to reset the app? This will clear all data.')) {
+        players = [];
+        settings = JSON.parse(JSON.stringify(INITIAL_SETTINGS));
+        saveData();
+        saveSettings();
+        if (window.SNAPSHOT_DATA) {
+            localStorage.setItem(getStorageKey('ignoreSnapshot'), 'true');
+        }
+        if (typeof syncToCloud === 'function') {
+            syncToCloud().then(() => { location.reload(); }).catch(() => { location.reload(); });
+        } else {
+            location.reload();
+        }
+    }
+}
+
+function importDataFromFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            localStorage.removeItem(getStorageKey('ignoreSnapshot'));
+            if (Array.isArray(data)) {
+                players = data;
+            } else if (data.players && Array.isArray(data.players)) {
+                players = data.players;
+                if (data.settings) settings = data.settings;
+            }
+            saveData();
+            syncToCloud();
+            renderPlayers();
+            applySettings();
+            alert('Data imported successfully!');
+        } catch (err) {
+            alert('Error importing data: invalid JSON file.');
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = ''; // Reset file input
+}
+
+function openModal() { document.getElementById('addPlayerModal').classList.remove('hidden'); }
+function closeModal() { document.getElementById('addPlayerModal').classList.add('hidden'); }
+
+function addNewPlayer() {
+    if (!isAuthenticated) {
+        alert('Please log in as Admin to add players. Use the Admin Login button in the legend below.');
+        return;
+    }
+    const name = document.getElementById('newPlayerName').value.trim();
+    const hcp = parseFloat(document.getElementById('newPlayerHcp').value) || 28.0;
+    const cat = document.getElementById('newPlayerCategory').value;
+    
+    if (!name) {
+        alert('Please enter a name.');
+        return;
+    }
+    
+    const newPlayer = {
+        id: 'p' + Date.now(),
+        name: name.toUpperCase(),
+        handicap: hcp,
+        category: cat
+    };
+    
+    [1,2,3,4,5].forEach(i => {
+        newPlayer[`c${i}_handicap`] = '';
+        newPlayer[`c${i}_score`] = '';
+        newPlayer[`c${i}_color`] = 'h-none';
+        newPlayer[`c${i}_skill`] = 's-none';
+    });
+    
+    players.push(newPlayer);
+    saveData();
+    syncToCloud();
+    renderPlayers();
+    closeModal();
+    
+    document.getElementById('newPlayerName').value = '';
+    document.getElementById('newPlayerHcp').value = '28.0';
+}
+
+window.openEditModal = function(id) {
+    if (!isAuthenticated) return;
+    const p = players.find(x => x.id === id);
+    if (!p) return;
+    editingPlayerId = id;
+    document.getElementById('editPlayerName').value = p.name;
+    document.getElementById('editPlayerCategory').value = p.category;
+    document.getElementById('editPlayerModal').classList.remove('hidden');
+}
+
+window.closeEditModal = function() {
+    document.getElementById('editPlayerModal').classList.add('hidden');
+    editingPlayerId = null;
+}
+
+window.saveEditPlayer = function() {
+    if (!editingPlayerId) return;
+    const p = players.find(x => x.id === editingPlayerId);
+    if (p) {
+        p.name = document.getElementById('editPlayerName').value.trim().toUpperCase();
+        p.category = document.getElementById('editPlayerCategory').value;
+        saveData();
+        renderPlayers();
+    }
+    window.closeEditModal();
+}
+
+window.deletePlayer = function(id) {
+    if (!confirm('Delete this player?')) return;
+    players = players.filter(x => x.id !== id);
+    saveData();
+    renderPlayers();
+}
+
+// Auth Logic
+function hashPassword(password) {
+    let h = 0;
+    for (let i = 0; i < password.length; i++) {
+        h = ((h << 5) - h + password.charCodeAt(i)) | 0;
+    }
+    return 'fb_' + (h >>> 0).toString(16);
+}
+
+function checkAuthentication() {
+    const storedHash = localStorage.getItem(getStorageKey('adminPasswordHash'));
+    if (!storedHash) {
+        document.getElementById('loginTitle').textContent = 'Create Admin Password';
+    }
+    document.getElementById('loginModal').classList.remove('hidden');
+}
+
+function attemptLogin() {
+    const loginPassword = document.getElementById('loginPassword');
+    const password = loginPassword.value;
+    const storedHash = localStorage.getItem(getStorageKey('adminPasswordHash'));
+
+    if (password === 'RESET') {
+        localStorage.removeItem(getStorageKey('adminPasswordHash'));
+        alert('Password reset! Please refresh.');
+        location.reload();
+        return;
+    }
+
+    if (!password) return;
+    const inputHash = hashPassword(password);
+    
+    if (!storedHash || inputHash === storedHash) {
+        if (!storedHash) localStorage.setItem(getStorageKey('adminPasswordHash'), inputHash);
+        isAuthenticated = true;
+        document.getElementById('loginModal').classList.add('hidden');
+        updateUIForAuth();
+    } else {
+        document.getElementById('loginError').style.display = 'block';
+    }
+}
+
+function updateUIForAuth() {
+    const tabs = document.querySelector('.view-tabs');
+    if (tabs) tabs.style.display = (isAuthenticated || isGuest) ? 'flex' : 'none';
+    
+    const settingsBtn = document.getElementById('settingsBtn');
+    const addPlayerBtn = document.getElementById('addPlayerBtn');
+    const editModeBtn = document.getElementById('editModeBtn');
+    const highlightModeBtn = document.getElementById('highlightModeBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const cloudBtn = document.getElementById('cloudSetupBtn');
+    const importBtn = document.getElementById('importDataBtn');
+    const backupBtn = document.getElementById('downloadDataBtn');
+    const shareBtn = document.getElementById('shareSnapshotBtn');
+    const passBtn = document.getElementById('changePasswordBtn');
+    const resetBtn = document.getElementById('resetDataBtn');
+    const adminLoginLink = document.getElementById('adminLoginInLegend');
+
+    if (logoutBtn) logoutBtn.style.display = (isAuthenticated || isGuest) ? 'flex' : 'none';
+    
+    if (isAuthenticated) {
+        if (adminLoginLink) adminLoginLink.style.display = 'none';
+        if (settingsBtn) settingsBtn.style.display = 'flex';
+        if (addPlayerBtn) addPlayerBtn.style.display = 'flex';
+        if (editModeBtn) editModeBtn.style.display = 'flex';
+        if (highlightModeBtn) highlightModeBtn.style.display = 'flex';
+        if (cloudBtn) cloudBtn.style.display = 'flex';
+        if (importBtn) importBtn.style.display = 'inline-block';
+        if (backupBtn) backupBtn.style.display = 'inline-block';
+        if (shareBtn) shareBtn.style.display = 'inline-block';
+        if (passBtn) passBtn.style.display = 'inline-block';
+        if (resetBtn) resetBtn.style.display = 'inline-block';
+    } else {
+        if (adminLoginLink) adminLoginLink.style.display = 'flex';
+        if (settingsBtn) settingsBtn.style.display = 'none';
+        if (addPlayerBtn) addPlayerBtn.style.display = 'none';
+        if (editModeBtn) editModeBtn.style.display = 'none';
+        if (highlightModeBtn) highlightModeBtn.style.display = 'none';
+        if (cloudBtn) cloudBtn.style.display = 'none';
+        if (importBtn) importBtn.style.display = 'none';
+        if (backupBtn) backupBtn.style.display = 'none';
+        if (shareBtn) shareBtn.style.display = 'none';
+        if (passBtn) passBtn.style.display = 'none';
+        if (resetBtn) resetBtn.style.display = 'none';
+    }
+    renderPlayers();
+}
+
+// Manual Updates
+window.updateCourseManual = function (id, property, value) {
+    if (!isAuthenticated) return;
+    const p = players.find(x => x.id === id);
+    if (p) { p[property] = value; saveData(); }
+}
+window.setFocusedField = function (playerId, property) { lastFocusedField = { playerId, property }; }
+window.updateGlobalHandicaps = function (id, delta) {
+    if (!isAuthenticated) return;
+    const p = players.find(x => x.id === id);
+    if (p) {
+        const prop = (lastFocusedField.playerId === id && lastFocusedField.property) ? lastFocusedField.property : (currentView === 'handicaps' ? 'handicap' : 'c1_score');
+        if (prop === 'handicap') p.handicap = parseFloat((p.handicap + delta * 0.1).toFixed(1));
+        else {
+            let v = parseFloat(p[prop]) || 0;
+            p[prop] = Math.round(v + delta);
+        }
+        saveData(); renderPlayers();
+    }
+}
+
+// Data
+function loadData() {
+    const d = localStorage.getItem(getStorageKey('universalData'));
+    if (d) players = JSON.parse(d);
+}
+function saveData() {
+    localStorage.setItem(getStorageKey('universalData'), JSON.stringify(players));
+    clearTimeout(syncTimeout);
+    syncTimeout = setTimeout(syncToCloud, 1000);
+}
+
+// Cloud
+const HARDCODED_API_KEY = '';
+const HARDCODED_BIN_ID = '';
+
+function getCloudConfig() {
+    return {
+        apiKey: HARDCODED_API_KEY || localStorage.getItem(getStorageKey('jb_api_key')) || '',
+        binId:  HARDCODED_BIN_ID  || localStorage.getItem(getStorageKey('jb_bin_id'))  || ''
+    };
+}
+
+async function loadFromCloud() {
+    const { apiKey: k, binId: b } = getCloudConfig();
+    if (!k || !b) return;
+    try {
+        const res = await fetch(`${JSONBIN_API_BASE}/b/${b}/latest`, { headers: { 'X-Master-Key': k }, cache: 'no-store' });
+        if (res.ok) {
+            const d = await res.json();
+            if (d.record) {
+                if (d.record.players && d.record.players.length > 0) players = d.record.players;
+                if (d.record.settings) {
+                    settings = d.record.settings;
+                    if (!settings.courses || !Array.isArray(settings.courses)) {
+                        settings.courses = ["Course 1", "Course 2", "Course 3", "Course 4", "Course 5"];
+                    }
+                }
+                renderPlayers(); applySettings();
+            }
+        }
+    } catch (e) { console.warn('Cloud load failed, using local data'); }
+}
+
+// Cloud Setup
+window.openCloudSetup = function() {
+    const modal = document.getElementById('cloudSetupModal');
+    if (!modal) return;
+    document.getElementById('cloudApiKey').value = localStorage.getItem(getStorageKey('jb_api_key')) || '';
+    document.getElementById('cloudBinId').value = localStorage.getItem(getStorageKey('jb_bin_id')) || '';
+    modal.classList.remove('hidden');
+};
+
+window.closeCloudSetup = function() {
+    const modal = document.getElementById('cloudSetupModal');
+    if (modal) modal.classList.add('hidden');
+};
+
+window.saveCloudSetup = async function() {
+    const k = document.getElementById('cloudApiKey').value.trim();
+    const b = document.getElementById('cloudBinId').value.trim();
+    if (!k || !b) {
+        alert('Please enter both keys.');
+        return;
+    }
+    localStorage.setItem(getStorageKey('jb_api_key'), k);
+    localStorage.setItem(getStorageKey('jb_bin_id'), b);
+    window.closeCloudSetup();
+    await syncToCloud();
+    await loadFromCloud();
+    alert('Cloud sync connected!');
+};
+
+async function syncToCloud() {
+    const { apiKey: k, binId: b } = getCloudConfig();
+    if (!k || !b) return;
+    try {
+        await fetch(`${JSONBIN_API_BASE}/b/${b}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Master-Key': k },
+            body: JSON.stringify({ players, settings })
+        });
+    } catch (e) { console.warn('Cloud sync failed'); }
+}
+
+// Settings Modals
+window.openSettingsModal = function() {
+    document.getElementById('setSocietyName').value = settings.societyName || '';
+    document.getElementById('setSocietyYear').value = settings.societyYear || '';
+    if (!settings.courses || !Array.isArray(settings.courses)) {
+        settings.courses = ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5'];
+    }
+    [1,2,3,4,5].forEach(i => document.getElementById(`setCourse${i}`).value = settings.courses[i-1] || '');
+    document.getElementById('settingsModal').classList.remove('hidden');
+}
+window.closeSettingsModal = function() { document.getElementById('settingsModal').classList.add('hidden'); }
+window.confirmSaveSettings = function() {
+    settings.societyName = document.getElementById('setSocietyName').value;
+    settings.societyYear = document.getElementById('setSocietyYear').value;
+    settings.courses = [1,2,3,4,5].map(i => document.getElementById(`setCourse${i}`).value);
+    saveSettings(); closeSettingsModal();
+}
+
+// Password Management
+window.openChangePasswordModal = function() {
+    document.getElementById('changePasswordModal').classList.remove('hidden');
+}
+window.closeChangePasswordModal = function() {
+    document.getElementById('changePasswordModal').classList.add('hidden');
+    document.getElementById('changePassError').style.display = 'none';
+}
+window.saveNewPassword = function() {
+    const p1 = document.getElementById('newAdminPassword').value;
+    const p2 = document.getElementById('confirmAdminPassword').value;
+    if (!p1) return;
+    if (p1 !== p2) {
+        document.getElementById('changePassError').style.display = 'block';
+        return;
+    }
+    localStorage.setItem(getStorageKey('adminPasswordHash'), hashPassword(p1));
+    alert('Password updated successfully!');
+    window.closeChangePasswordModal();
+}
+
+// Snapshot
+window.takeScreenshot = function() {
+    html2canvas(document.body).then(canvas => {
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        const societyName = settings.societyName || 'Society';
+        a.download = `${societyName}-Scores.png`;
+        a.click();
+    });
+};
+
+window.downloadNewSociety = function() {
+    const snapshotData = { 
+        players: [], 
+        settings: { societyName: 'New Society', societyYear: new Date().getFullYear().toString(), courses: ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5'] }, 
+        currentView: 'overall' 
+    };
+    let html = document.documentElement.outerHTML;
+    html = html.replace(/<script id="snapshot-data">[\s\S]*?<\/script>/, '');
+    const injection = `<script id="snapshot-data">window.SNAPSHOT_DATA = ${JSON.stringify(snapshotData)};<\/script></body>`;
+    html = html.replace('</body>', injection);
+    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `new-society.html`;
+    a.click();
+};
+
+window.window.takeScreenshot = function() {
+    html2canvas(document.body).then(canvas => {
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        const societyName = settings.societyName || 'Society';
+        a.download = `${societyName}-Scores.png`;
+        a.click();
+    });
+};
+
+window.downloadNewSociety = function() {
+    const snapshotData = { 
+        players: [], 
+        settings: { societyName: 'New Society', societyYear: new Date().getFullYear().toString(), courses: ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5'] }, 
+        currentView: 'overall' 
+    };
+    let html = document.documentElement.outerHTML;
+    html = html.replace(/<script id="snapshot-data">[\s\S]*?<\/script>/, '');
+    const injection = `<script id="snapshot-data">window.SNAPSHOT_DATA = ${JSON.stringify(snapshotData)};<\/script></body>`;
+    html = html.replace('</body>', injection);
+    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `new-society.html`;
+    a.click();
+};
+
+window.downloadJsonBackup = function() {
+    const backupData = {
+        societyName: (typeof settings !== 'undefined' && settings.societyName) || '',
+        societyYear: (typeof settings !== 'undefined' && settings.societyYear) || '',
+        savedAt: new Date().toISOString(),
+        players: typeof players !== 'undefined' ? players : [],
+        settings: typeof settings !== 'undefined' ? settings : {},
+        currentView: typeof currentView !== 'undefined' ? currentView : 'handicaps'
+    };
+    const jsonStr = JSON.stringify(backupData, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const mo = String(now.getMonth() + 1).padStart(2, '0');
+    const yyyy = now.getFullYear();
+    const societyLabel = (typeof settings !== 'undefined' && settings.societyName 
+        ? settings.societyName.replace(/[^a-zA-Z0-9]+/g, '-').trim().replace(/^-+|-+$/g, '') 
+        : 'backup');
+    const filename = `${societyLabel}-${hh}-${mm}-${dd}-${mo}-${yyyy}.json`;
+
+    if (window.showSaveFilePicker) {
+        window.showSaveFilePicker({
+            suggestedName: filename,
+            types: [{ description: 'Golf Backup (JSON)', accept: { 'application/json': ['.json'] } }]
+        }).then(function(fileHandle) {
+            return fileHandle.createWritable().then(function(writable) {
+                return writable.write(blob).then(function() {
+                    return writable.close();
+                }).then(function() {
+                    alert('✅ Backup saved as JSON: ' + fileHandle.name);
+                });
+            });
+        }).catch(function(err) {
+            if (err.name !== 'AbortError') {
+                fallbackJsonDownload(blob, filename);
+            }
+        });
+    } else {
+        fallbackJsonDownload(blob, filename);
+    }
+};
+window.downloadSnapshot = function() {
+    const snapshotData = { 
+        players: typeof players !== 'undefined' ? players : [], 
+        settings: typeof settings !== 'undefined' ? settings : {}, 
+        currentView: typeof currentView !== 'undefined' ? currentView : 'handicaps' 
+    };
+    let html = document.documentElement.outerHTML;
+    const scriptStart = '<script id="snapshot-' + 'data">';
+    const scriptEnd = '</' + 'script>';
+    const regex = new RegExp(scriptStart + '[\\s\\S]*?' + scriptEnd, 'g');
+    html = html.replace(regex, '');
+    const injection = `${scriptStart}window.SNAPSHOT_DATA = ${JSON.stringify(snapshotData)};${scriptEnd}</body>`;
+    html = html.replace('</body>', injection);
+    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    
+    const dateStr = new Date().toISOString().split('T')[0];
+    const societyLabel = (typeof settings !== 'undefined' && settings.societyName 
+        ? settings.societyName.replace(/[^a-zA-Z0-9]+/g, '-').trim().replace(/^-+|-+$/g, '') 
+        : 'golf-app');
+    a.download = `${societyLabel}-snapshot-${dateStr}.html`;
+    a.click();
+};
+
+function fallbackJsonDownload(blob, filename) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(a.href); }, 2000);
+}
+
+
+
+
+// ===== SAVE AS SOCIETY =====
+window.openSaveAsSocietyModal = function() { window.quickSaveAsSociety(); };
+window.closeSaveAsSocietyModal = function() {
+    var m = document.getElementById('saveAsSocietyModal');
+    if (m) m.classList.add('hidden');
+};
+window.confirmSaveAsSociety = function() { window.quickSaveAsSociety(); };
+
+window.quickSaveAsSociety = function() {
+    var newName = (settings.societyName || 'Golf Society').trim();
+    var newYear = (settings.societyYear || '').trim();
+    var fullTitle = newName + (newYear ? ' ' + newYear : '');
+    var safeFilename = fullTitle.replace(/[^a-zA-Z0-9 \-]/g,'').trim().replace(/\s+/g,'-').toLowerCase() || 'golf-society';
+    var newSettings = JSON.parse(JSON.stringify(settings));
+    var currentPlayers = JSON.parse(JSON.stringify(players));
+    var societySnapshot = {
+        players: currentPlayers,
+        settings: newSettings,
+        isSocietySave: true,
+        adminHash: (localStorage.getItem(getStorageKey('adminPasswordHash')) || ''),
+    };
+
+    function buildAndSave(html) {
+        // Update title
+        html = html.replace(/<title>[^<]*<\/title>/, '<title>' + fullTitle + '<\/title>');
+        // Remove old snapshot
+        html = html.replace(/<script id="snapshot-data">[\s\S]*?<\/script>/g, '');
+        // Inject snapshot
+        var tag = '<scr' + 'ipt id="snapshot-data">window.SNAPSHOT_DATA = ' + JSON.stringify(societySnapshot) + ';<\/scr' + 'ipt>';
+        html = html.replace(/<\/body>/, tag + '<\/body>');
+        var blob = new Blob([html], { type: 'text/html' });
+
+        // Use File System Access API if available (Chrome/Edge) - gives a real Save As dialog
+        if (window.showSaveFilePicker) {
+            window.showSaveFilePicker({
+                suggestedName: safeFilename + '.html',
+                types: [{ description: 'Golf App HTML', accept: { 'text/html': ['.html'] } }]
+            }).then(function(fileHandle) {
+                fileHandle.createWritable().then(function(writable) {
+                    writable.write(blob).then(function() {
+                        writable.close();
+                        alert('Saved as: ' + fileHandle.name + '\n\nDouble-click the file to open it in your browser.');
+                    });
+                });
+            }).catch(function(err) {
+                if (err.name !== 'AbortError') { fallbackDownload(blob); }
+            });
+        } else {
+            fallbackDownload(blob);
+        }
+    }
+
+    function fallbackDownload(blob) {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = safeFilename + '.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(a.href); }, 2000);
+    }
+
+    // Fetch own source first (clean, no live-DOM artefacts)
+    fetch(location.href, { cache: 'no-store' })
+        .then(function(r) { return r.text(); })
+        .then(function(html) { buildAndSave(html); })
+        .catch(function() {
+            // file:// fallback
+            buildAndSave('<!DOCTYPE html>\n' + document.documentElement.outerHTML);
+        });
+};
+// ===== END SAVE AS SOCIETY =====
+// Initialize the app after all scripts have loaded (including snapshot-data)
+window.addEventListener('load', init);
+</script>
+</body></html>
